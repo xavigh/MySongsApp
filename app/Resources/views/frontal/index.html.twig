@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'form/fieldForm.html.twig' %}
 
 {# title #}
 {% block title %} SONGS APP {% endblock %}
@@ -54,14 +55,20 @@
           </span>
     </div>
 
-    <div class="row continer">
-          <div class="col-md-8 m-3">
-          <span class="">
-          Number of songs per page<input type="text" id="numSongsDisplay" name="songsPage">
-          </span>
+    
+     <div class="row ">
+      {% if form is not empty %}
+        <div class="col-md-4">
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+        </div>
+       {% endif %} 
+    </div>
           
-          </div>
-      </div>
+    
+
+     
 
     <div class="row">
 

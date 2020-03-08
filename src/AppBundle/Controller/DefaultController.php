@@ -10,8 +10,12 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
 
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
@@ -20,18 +24,53 @@ class DefaultController extends Controller
      */
     public function homeAction(Request $request, $pageNum = 1)
     {
+            
+
+            // form without data class to manage the numMaxSongs per page
+            $defaultData = ['numMaxSongs' => 0];
+            $form = $this->createFormBuilder($defaultData)
+                ->add('numMaxSongs', IntegerType::class, array('label' => 'Songs per page'))            
+                ->add('submit', SubmitType::class)
+                ->getForm();
+          
+            $form->handleRequest($request);
+
+            
+            
+
+            if ($form->isSubmitted() && $form->isValid()) {
+               
+                // data is an array with "name", "email", and "message" keys
+                $data = $form->getData();
+                // get the numMaxSongs from the array of $data sent through the POST method
+               
+                $numMaxSongs = $data['numMaxSongs'];
+               
+                var_dump($numMaxSongs);
+               
+            }
+            else{
+                $numMaxSongs = 3;
+            }
+            
+                    
+                
+               
+                   
+            
+
         //constant value of numMaxSongs
         // do a form with a POST method to set the numMaxSong display per page by the user.
-        $numMaxSongs = 3;         
+            
 
         // replace this example code with whatever you need
-        $musicRepo = $this->getDoctrine()->getRepository(MusicApp::class);
-                     
+        $musicRepo = $this->getDoctrine()->getRepository(MusicApp::class);                     
         // calling the repository function pageSongs to get the songs elements per page to do pagination
         $songs = $musicRepo->paginationElements($pageNum, $numMaxSongs);
-
-        return $this->render('frontal/index.html.twig', array( 'songs'=>$songs, 'numMaxSongs'=>$numMaxSongs, 'currentPage'=>$pageNum) );
+        return $this->render('frontal/index.html.twig', array( 'songs'=>$songs, 'numMaxSongs'=>$numMaxSongs, 'currentPage'=>$pageNum, 'form' => $form->createView() ) );
     }
+
+    
 
     /**
      * @Route("/about", name="about")

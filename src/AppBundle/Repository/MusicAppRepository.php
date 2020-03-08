@@ -12,11 +12,11 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
 {
     
     // THIS FUNCTION RETURNS the number of songs per page in the pagination component.
-    public function paginationElements($pageNum = 1 , $numMaxSongs=3){
+    public function paginationElements($pageNum = 1 , $numMaxSongs){
 
         
         
-        var_dump("var dump = ".$numMaxSongs);
+        //var_dump("var dump = ".$numMaxSongs);
         
 
         
