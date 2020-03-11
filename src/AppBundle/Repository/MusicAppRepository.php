@@ -32,23 +32,25 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
     public function findAllWithSearch($term)
     {
 
-        $qb = $this->createQueryBuilder('c');
-        var_dump($term);
+        
         if ($term) {
-            $qb->andWhere('c.trackName LIKE :term OR c.artistName LIKE :term OR c.albumName LIKE :term ')
-                ->setParameter('term', '%' . $term . '%')
-            ;
-         
+            $qb = $this->createQueryBuilder();
+            $posts = $qb->select('p')
+                ->from(MusicApp::getClassName(), 'p')
+                ->where($qb->expr()->like('p.trackName', ':term')
+                ->andWhere($qb-expr()->like('p.artistName', ':term')
+                ->andWhere($qb-expr()->like('p.albumName', ':term')
            
+                ->setParameter('term', '%' . $term . '%')
+             ;
+        }else{
+            die();
         }
-       
         return $qb
             ->orderBy('c.creationDate', 'DESC')
             ->getQuery()
             ->getResult()
         ;
-       
-    }
+       }
 
-
-}
+   }
