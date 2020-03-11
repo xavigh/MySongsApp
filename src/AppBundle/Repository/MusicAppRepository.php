@@ -2,6 +2,14 @@
 
 namespace AppBundle\Repository;
 
+
+
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use AppBundle\Entity\MusicApp;
+
 /**
  * MusicAppRepository
  *
@@ -15,8 +23,8 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
     public function paginationElements($pageNum = 1 , $numMaxSongs){
 
         //var_dump("var dump = ".$numMaxSongs);
-        
-        $query = $this->createQueryBuilder('s')
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQueryBuilder('s')
         ->where('s.topFavorite = 1')
         ->setFirstResult($numMaxSongs*($pageNum-1))
         ->setMaxResults($numMaxSongs)
@@ -28,29 +36,30 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
 
 
 
-  
+    // this function returns the search results to the action handleSearch
     public function findAllWithSearch($term)
     {
+       
+        var_dump($term);
+       
+        $em = $this->getDoctrine()->getManager();
+        $qb = createQueryBuilder();
+        $posts = $qb->select('p')   
 
-        
-        if ($term) {
-            $qb = $this->createQueryBuilder();
-            $posts = $qb->select('p')
-                ->from(MusicApp::getClassName(), 'p')
-                ->where($qb->expr()->like('p.trackName', ':term')
-                ->andWhere($qb-expr()->like('p.artistName', ':term')
-                ->andWhere($qb-expr()->like('p.albumName', ':term')
-           
-                ->setParameter('term', '%' . $term . '%')
-             ;
-        }else{
-            die();
-        }
-        return $qb
-            ->orderBy('c.creationDate', 'DESC')
-            ->getQuery()
-            ->getResult()
+        ->where($qb->expr()->like('p.trackName', ':term'))
+        ->andWhere($qb-expr()->like('p.artistName', ':term'))
+        ->andWhere($qb-expr()->like('p.albumName', ':term'))           
+        ->setParameter('term', '%' . $term . '%');
+    
+
+        return $posts
+        ->orderBy('c.creationDate', 'DESC')
+        ->getQuery()
+        ->getArrayResult();
         ;
-       }
-
+      
+  
    }
+
+
+}//end class repository
