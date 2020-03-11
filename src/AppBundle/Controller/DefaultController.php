@@ -17,6 +17,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use AppBundle\Repository\MusicAppRepository;
+
 class DefaultController extends Controller
 {
     /**
@@ -35,9 +37,7 @@ class DefaultController extends Controller
           
             $form->handleRequest($request);
 
-            
-            
-
+            // if form is submitted and valie proceed
             if ($form->isSubmitted() && $form->isValid()) {
                
                 // data is an array with "name", "email", and "message" keys
@@ -52,22 +52,16 @@ class DefaultController extends Controller
             else{
                 $numMaxSongs = 3;
             }
-            
-                    
-                
-               
-                   
-            
 
-        //constant value of numMaxSongs
-        // do a form with a POST method to set the numMaxSong display per page by the user.
             
-
-        // replace this example code with whatever you need
-        $musicRepo = $this->getDoctrine()->getRepository(MusicApp::class);                     
-        // calling the repository function pageSongs to get the songs elements per page to do pagination
-        $songs = $musicRepo->paginationElements($pageNum, $numMaxSongs);
-        return $this->render('frontal/index.html.twig', array( 'songs'=>$songs, 'numMaxSongs'=>$numMaxSongs, 'currentPage'=>$pageNum, 'form' => $form->createView() ) );
+            // search bar
+       
+            // calling the repository function pageSongs to get the songs elements per page to do pagination
+                            
+            $musicRepo = $this->getDoctrine()->getRepository(MusicApp::class);                
+            $songs = $musicRepo->paginationElements($pageNum, $numMaxSongs);
+            return $this->render('frontal/index.html.twig', array( 'songs'=>$songs, 'numMaxSongs'=>$numMaxSongs, 'currentPage'=>$pageNum, 'form' => $form->createView() ) );
+         
     }
 
     
@@ -75,7 +69,7 @@ class DefaultController extends Controller
     /**
      * @Route("/about", name="about")
      */
-    public function aboutAction(Request $request)
+    public function aboutAction( Request $request)
     {
         // replace this example code with whatever you need
         return $this->render('frontal/about.html.twig' );
@@ -186,13 +180,13 @@ class DefaultController extends Controller
 
         }
 
-        /**
+    /**
      * @Route("/login/", name="login")
      */
     public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
     {
-         // get the login error if there is one
-         $error = $authenticationUtils->getLastAuthenticationError();
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -203,5 +197,7 @@ class DefaultController extends Controller
         ]);
 
     }
+
+   
 
 }

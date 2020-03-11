@@ -53,6 +53,9 @@
             <a class="nav-link" href="{{  path('login')  }}">Login</a>
           </li>
         </ul>
+        {{ render(controller(
+          'AppBundle:ManageSong:searchSongs'
+          ))}}
       </div>
     </div>
   </nav>

@@ -48,23 +48,26 @@
   
   <!-- Page Content -->
   <div class="container">
-  <div class="">
-    <h1 class="my-4 d-inline">Favorite songs</h1>
-          <span class="float-lg-right p-2">
-          Search<input class="" type="text" id="searchInput" name="searchName">
-          </span>
-    </div>
+   
+    <h1 class="my-4 ">Favorite songs</h1>
+      <div class="control-group form-group row col-md-6 ">
+        <div class="controls p-2  " >
 
-    
-     <div class="row ">
-      {% if form is not empty %}
-        <div class="col-md-4">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        {{ form_end(form) }}
+        
+        
+       
+
+          {% if form is not empty %}
+        <div class="col-md-6 p-2">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
         </div>
-       {% endif %} 
-    </div>
+          {% endif %} 
+
+      </div>
+      </div>
+  
           
     
 

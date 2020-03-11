@@ -14,11 +14,7 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
     // THIS FUNCTION RETURNS the number of songs per page in the pagination component.
     public function paginationElements($pageNum = 1 , $numMaxSongs){
 
-        
-        
         //var_dump("var dump = ".$numMaxSongs);
-        
-
         
         $query = $this->createQueryBuilder('s')
         ->where('s.topFavorite = 1')
@@ -28,6 +24,30 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
 
         return $query->getResult();
       
+    }
+
+
+
+  
+    public function findAllWithSearch($term)
+    {
+
+        $qb = $this->createQueryBuilder('c');
+        var_dump($term);
+        if ($term) {
+            $qb->andWhere('c.trackName LIKE :term OR c.artistName LIKE :term OR c.albumName LIKE :term ')
+                ->setParameter('term', '%' . $term . '%')
+            ;
+         
+           
+        }
+       
+        return $qb
+            ->orderBy('c.creationDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+       
     }
 
 

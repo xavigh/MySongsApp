@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+
+{# title #}
+{% block title %} SONGS APP search page {% endblock %}
+
+{% block body %}
+
+<div class="container">
+   
+    <h1 class="my-4 ">Search songs result</h1>
+    
+        
+<div class="row">
+
+    {# loop through songs in DB #}
+     {% for track in songs %}
+
+        <div class="col-lg-3 col-sm-6 portfolio-item">
+
+              <div class="card h-100">               
+                    <IFRAME  SRC="https://www.youtube.com/embed/{{track.url}}" FRAMEBORDER="0" ALLOWFULLSCREEN></IFRAME>
+
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="{{ path('songSelected',{'id':track.id}) }}"> {{track.trackName}}</a>
+                  </h4>
+                  <p class="card-text">{{ track.description }}</p>                  
+                 
+                </div>
+                <span class="pl-2 pb-2 ">
+                  <a href="{{ path('deletesong',{'id':track.id}) }}"> Delete |</a>
+                  <a href="{{ path('addsong',{'id':track.id}) }}"> Edit</a>
+                  </span>
+              </div>
+                 
+        </div>
+
+  {% endfor %}
+      
+     
+    </div>
+    <!-- /.row -->
+    </div>
+   
+  
+  <!-- /.container -->
+  {% endblock  %}
+
+

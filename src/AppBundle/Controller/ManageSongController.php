@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Entity\MusicApp;
 use AppBundle\Form\MusicType;
@@ -94,7 +96,7 @@ class ManageSongController extends Controller
     }
 
 
-      /**
+    /**
      * @Route("/newCategory/{id}", name="newCategory", defaults={"id": null}))
      */
     public function newCategoryAction(Request $request, $id = null)
@@ -133,6 +135,55 @@ class ManageSongController extends Controller
            return $this->render('manageSongs/newCategory.html.twig', array(  'form' => $form->createView()  ));
     }
 
+
+     /**
+     * @Route("/searchRoute", name="searchRoute")
+     */
+    public function searchSongsAction()
+    {
+       
+        
+        $form = $this->createFormBuilder(null)
+        ->add('searchWord', TextType::class)        
+       ->getForm();
+  
+        return $this->render('frontal/searchBar.html.twig',
+                    array( 'form'=> $form->createView())
+        
+        );
+
+    }
+
+
+    /**
+     * @Route("/search", name="handleSearch")
+     * @param Request $request
+    */
+   public function handleSearch(Request $request){
+   
+    //Recoger POST
+    $searchWord =  dump($request->request->get('form')['searchWord']);    
+    var_dump("POST:..". $searchWord);       
+
+
+
+    //var_dump($request->request);
+    
+    $searchRepo = $this->getDoctrine()->getRepository(MusicApp::class);
+    $songs = $searchRepo->findAllWithSearch($searchWord); 
+      
+     
+    return $this->render('frontal/searchPage.html.twig', array('songs'=>$songs));
+    
+
+
+   }
+
+     
+   
+    
+    
+   
 
     
 }
