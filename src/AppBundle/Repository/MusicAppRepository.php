@@ -37,28 +37,36 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
 
 
     // this function returns the search results to the action handleSearch
+
+    /**
+     * @param $term
+     *
+     */
     public function findAllWithSearch($term)
     {
        
-        var_dump("i am inside function findAllWithSearch ". $term);
+        var_dump("I am inside function findAllWithSearch ". $term);
        
         $em = $this->getEntityManager()->getRepository(MusicApp::class);
-        $qb = $em->createQueryBuilder('p');       
-
+        $qb = $em->createQueryBuilder('p'); 
 
         $songs = $qb->select('p')   
         
-        ->where($qb->expr()->like('p.trackName', ':term'))
-        ->andWhere($qb->expr()->like('p.artistName', ':term'))
-        ->andWhere($qb->expr()->like('p.albumName', ':term'))           
-        ->setParameter('term', '%' .$term. '%');
+        ->where($qb->expr()->orX(
+            
+            $qb->expr()->like('p.trackName', ':term'),
+            $qb->expr()->like('p.artistName', ':term'),
+            $qb->expr()->like('p.albumName', ':term')
+        ))
+              
+        ->setParameter('term', '%'.$term.'%');
     
 
         return $songs
         ->orderBy('p.creationDate', 'DESC')
         ->getQuery()
         ->getResult();
-        ;
+        
       
        
    }

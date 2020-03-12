@@ -161,12 +161,9 @@ class ManageSongController extends Controller
     */
    public function handleSearch(Request $request){
    
-    //Recoger POST
-    
+    //Recoger POST    
     $term =  dump($request->request->get('form')['searchWord']);    
-    //var_dump("POST:..". $searchWord);       
-
-    //var_dump($request->request);    
+      
    
     $em = $this->getDoctrine()->getManager();
     $searchRepo = $em->getRepository(MusicApp::class);
