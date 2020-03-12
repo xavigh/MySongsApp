@@ -163,23 +163,19 @@ class ManageSongController extends Controller
    
     //Recoger POST
     
-    $searchWord =  dump($request->request->get('form')['searchWord']);    
+    $term =  dump($request->request->get('form')['searchWord']);    
     //var_dump("POST:..". $searchWord);       
 
     //var_dump($request->request);    
    
     $em = $this->getDoctrine()->getManager();
     $searchRepo = $em->getRepository(MusicApp::class);
-    $songs = $searchRepo->findAllWithSearch($searchWord); 
-      
-    $em->persist($songs);
-    $em->flush();
-   
     
+    $songs = $searchRepo->findAllWithSearch($term);     
+    //var_dump($songs);
      
     return $this->render('frontal/searchPage.html.twig', array('songs'=>$songs));
     
-
 
    }
 

@@ -23,7 +23,7 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
     public function paginationElements($pageNum = 1 , $numMaxSongs){
 
         //var_dump("var dump = ".$numMaxSongs);
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getEntityManager()->getRepository(MusicApp::class);
         $query = $em->createQueryBuilder('s')
         ->where('s.topFavorite = 1')
         ->setFirstResult($numMaxSongs*($pageNum-1))
@@ -40,25 +40,27 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
     public function findAllWithSearch($term)
     {
        
-        var_dump($term);
+        var_dump("i am inside function findAllWithSearch ". $term);
        
-        $em = $this->getDoctrine()->getManager();
-        $qb = createQueryBuilder();
-        $posts = $qb->select('p')   
+        $em = $this->getEntityManager()->getRepository(MusicApp::class);
+        $qb = $em->createQueryBuilder('p');       
 
+
+        $songs = $qb->select('p')   
+        
         ->where($qb->expr()->like('p.trackName', ':term'))
-        ->andWhere($qb-expr()->like('p.artistName', ':term'))
-        ->andWhere($qb-expr()->like('p.albumName', ':term'))           
-        ->setParameter('term', '%' . $term . '%');
+        ->andWhere($qb->expr()->like('p.artistName', ':term'))
+        ->andWhere($qb->expr()->like('p.albumName', ':term'))           
+        ->setParameter('term', '%' .$term. '%');
     
 
-        return $posts
-        ->orderBy('c.creationDate', 'DESC')
+        return $songs
+        ->orderBy('p.creationDate', 'DESC')
         ->getQuery()
-        ->getArrayResult();
+        ->getResult();
         ;
       
-  
+       
    }
 
 
