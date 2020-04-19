@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextArea;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
 
 /**
@@ -137,14 +138,15 @@ class ManageSongController extends Controller
 
 
      /**
-     * @Route("/searchRoute", name="searchRoute")
+     * @Route("/searchForm", name="searchForm")
      */
     public function searchSongsAction()
     {
-       
-        
+               
         $form = $this->createFormBuilder(null)
-        ->add('searchWord', TextType::class)        
+        ->add('searchWord', searchType::class, ['label' => false] )
+        ->add('search', SubmitType::class  )      
+          
        ->getForm();
   
         return $this->render('frontal/searchBar.html.twig',
@@ -159,28 +161,23 @@ class ManageSongController extends Controller
      * @Route("/search", name="handleSearch")
      * @param Request $request
     */
-   public function handleSearch(Request $request){
+    public function handleSearch(Request $request){
    
-    //Recoger POST    
-    $term =  dump($request->request->get('form')['searchWord']);    
-      
-   
-    $em = $this->getDoctrine()->getManager();
-    $searchRepo = $em->getRepository(MusicApp::class);
-    
-    $songs = $searchRepo->findAllWithSearch($term);     
-    //var_dump($songs);
-     
-    return $this->render('frontal/searchPage.html.twig', array('songs'=>$songs));
+            //gather POST  values  
+            $term =  dump($request->request->get('form')['searchWord']);    
+            
+        
+            $em = $this->getDoctrine()->getManager();
+            $searchRepo = $em->getRepository(MusicApp::class);
+            
+            $songs = $searchRepo->findAllWithSearch($term);     
+            //var_dump($songs);
+            
+            return $this->render('frontal/searchPage.html.twig', array('songs'=>$songs));
     
 
    }
 
-     
-   
     
-    
-   
-
     
 }

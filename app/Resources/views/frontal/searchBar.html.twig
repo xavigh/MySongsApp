@@ -1,12 +1,19 @@
+<div class="pl-4">
 
 
-{{ form_start(form, {
-    'attr': {'class': 'navbar-form navbar-right m-2', 'action':path('handleSearch')}
+
+{{ form_start(form.searchWord, {
+    'attr': {'class': 'navbar-form navbar-right  form-inline text-white ml-5 ', 'action':path('handleSearch') }
+ 
 }) }}
 
-{{ form_widget(form.searchWord, {
-    'attr': {'class': 'form-control  search-query'}
- 
- }) }}
-
 {{ form_end(form) }}
+  
+{{ form_widget(form.search, { 'label_attr': {'class': ''} }) }}
+
+ </div>
+
+
+
+
+

@@ -45,11 +45,14 @@ class DefaultController extends Controller
                 // get the numMaxSongs from the array of $data sent through the POST method
                
                 $numMaxSongs = $data['numMaxSongs'];
+                // to avoid error if user inputs a negative number or zero.
+                ( $numMaxSongs <= 0 )? $numMaxSongs = 3: $numMaxSongs; // Ternary conditional
                
                 var_dump($numMaxSongs);
                
             }
             else{
+                
                 $numMaxSongs = 3;
             }
 
@@ -161,6 +164,7 @@ class DefaultController extends Controller
             $user->setPassword($password);
             // 3b) username == email to register
             $user->setUsername($user->getEmail());
+            $user->setRoles(array('ROLE_USER'));
 
             // 4) save the User!
             $entityManager = $this->getDoctrine()->getManager();

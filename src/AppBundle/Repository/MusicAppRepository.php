@@ -45,11 +45,12 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
     public function findAllWithSearch($term)
     {
        
-        var_dump("I am inside function findAllWithSearch ". $term);
+        if($term){
+
+            var_dump("MusicApp Repository I am inside function findAllWithSearch searching for the word ". $term);
        
         $em = $this->getEntityManager()->getRepository(MusicApp::class);
         $qb = $em->createQueryBuilder('p'); 
-
         $songs = $qb->select('p')   
         
         ->where($qb->expr()->orX(
@@ -57,8 +58,7 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
             $qb->expr()->like('p.trackName', ':term'),
             $qb->expr()->like('p.artistName', ':term'),
             $qb->expr()->like('p.albumName', ':term')
-        ))
-              
+        ))              
         ->setParameter('term', '%'.$term.'%');
     
 
@@ -67,8 +67,10 @@ class MusicAppRepository extends \Doctrine\ORM\EntityRepository
         ->getQuery()
         ->getResult();
         
-      
-       
+        }else{
+            return $this->redirectToRoute('homepage');
+        }
+        
    }
 
 
